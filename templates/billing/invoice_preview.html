@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="invoice-shell">
+  <div class="invoice-head"><strong>AGUAPAS EP - AUTOMATIZADO</strong><span>Empresa Pública de Agua, Alcantarillado y Aseo de Pasaje</span></div>
+  <div class="invoice-body">
+    <p>Estimado(a) <strong>{{ invoice.subscriber.full_name }}</strong>,</p>
+    <p>Detalle de su factura de agua potable correspondiente a <strong>{{ invoice.period|date:'F Y' }}</strong>.</p>
+    <table class="table invoice-table">
+      <tr><th>Cuenta</th><td>{{ invoice.subscriber.account_number }}</td></tr>
+      <tr><th>Propietario</th><td>{{ invoice.subscriber.full_name }}</td></tr>
+      <tr><th>Correo</th><td>{{ invoice.subscriber.email|default:'No registrado' }}</td></tr>
+      <tr><th>Celular</th><td>{{ invoice.subscriber.phone|default:'No registrado' }}</td></tr>
+      <tr><th>Categoría</th><td>{{ invoice.subscriber.category|default:'No registrada' }}</td></tr>
+      <tr><th>Dirección</th><td>{{ invoice.subscriber.address|default:'No registrada' }}</td></tr>
+      <tr><th>Código abonado</th><td>{{ invoice.subscriber.client_code|default:'No registrado' }}</td></tr>
+      <tr><th>Número de medidor</th><td>{{ invoice.subscriber.meter_number|default:'No registrado' }}</td></tr>
+      <tr><th>Lectura anterior</th><td>{{ invoice.subscriber.previous_reading }}</td></tr>
+      <tr><th>Lectura actual</th><td>{{ invoice.subscriber.current_reading }}</td></tr>
+      <tr><th>Total de cartas</th><td>{{ invoice.subscriber.total_letters }}</td></tr>
+      <tr><th>Vencimiento</th><td>{{ invoice.due_date|date:'d/m/Y'|default:'Por confirmar' }}</td></tr>
+    </table>
+    <div class="invoice-total"><span>Total a pagar</span><strong>$ {{ invoice.amount|floatformat:2 }}</strong></div>
+    <p>Le solicitamos acercarse a nuestras oficinas para regularizar su situación. Si ya realizó el pago, ignore este mensaje.</p>
+    <p>Atentamente,<br><strong>AGUAPAS EP - BOT</strong><br>Empresa Pública de Agua, Alcantarillado y Aseo de Pasaje</p>
+  </div>
+  <div class="invoice-foot">Documento informativo generado por AGUAPAS EP - AUTOMATIZADO.</div>
+</div>
+<style>
+.invoice-shell{max-width:680px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 8px 30px #173b5720}.invoice-head{background:#087db2;color:#fff;padding:22px 26px;display:flex;justify-content:space-between;align-items:center}.invoice-head strong{font-size:22px}.invoice-body{padding:24px}.invoice-table{margin:20px 0}.invoice-table th{width:42%;background:#f3f7fa}.invoice-total{display:flex;justify-content:space-between;align-items:center;background:#08498e;color:#fff;padding:15px;border-radius:5px;font-size:16px}.invoice-total strong{font-size:22px}.invoice-foot{background:#f3f7fa;color:#72808a;padding:14px;text-align:center;font-size:12px}
+</style>
+{% endblock %}

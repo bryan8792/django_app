@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Importar Excel · AGUAPAS EP - AUTOMATIZADO{% endblock %}
+{% block header_title %}Importar Excel{% endblock %}
+{% block extra_css %}
+<style>
+  .import-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.85fr);gap:16px;align-items:stretch}
+  .import-card{background:#fff;border:1px solid #dce6ef;border-radius:14px;padding:26px;box-shadow:0 2px 6px #173b5710}
+  .import-card h2{font-size:16px;margin:0 0 22px;color:#142743}
+  .import-card p{color:#6f849b;line-height:1.6}
+  .upload-zone{min-height:235px;border:1px dashed #72cbd4;border-radius:14px;background:#f2fbfc;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+  .upload-icon{font-size:42px;line-height:1;color:#078da1;margin-bottom:16px}
+  .upload-zone h3{margin:0 0 8px;font-size:16px;color:#142743}
+  .upload-zone p{margin:0 auto 20px;max-width:310px;font-size:13px}
+  .upload-zone input[type=file]{max-width:100%;font-size:12px;margin-bottom:14px}
+  .import-btn{background:#078da1;color:#fff;border:0;border-radius:9px;padding:11px 18px;font-weight:700;cursor:pointer}
+  .import-btn:hover{background:#067989}
+  .details{display:grid;gap:18px;margin-bottom:22px}
+  .detail-row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #eef2f5;padding-bottom:12px;color:#6c8197}
+  .detail-row strong{color:#142743;text-align:right}
+  .detail-row .valid{color:#21a957}
+  .notice{background:#fff9e8;border-radius:12px;padding:15px;color:#a66b09;font-size:12px;line-height:1.6;display:flex;gap:10px}
+  .notice-icon{font-size:18px;flex:0 0 auto}
+  .intro{margin-bottom:22px}.intro .eyebrow{color:#078da1}.intro h2{font-size:27px;margin:6px 0 6px}.intro p{margin:0;color:#6f849b}
+  @media(max-width:800px){.import-grid{grid-template-columns:1fr}.content{padding:24px 18px}}
+</style>
+{% endblock %}
+{% block content %}
+  <div class="intro">
+    <div class="eyebrow">Datos y facturación</div>
+    <h2>Importar Excel</h2>
+    <p>Actualiza abonados, lecturas, deuda, imágenes y periodo.</p>
+  </div>
+  <div class="import-grid">
+    <div class="import-card">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="upload-zone">
+          <div class="upload-icon">⇧</div>
+          <h3>Carga el archivo de planillaje</h3>
+          <p>Validaremos cuenta, usuario, total, preguntas, respuestas e imagen.</p>
+          {{ form.file.errors }}
+          {{ form.file }}
+          <button class="import-btn" type="submit">Seleccionar Excel</button>
+        </div>
+      </form>
+    </div>
+    <aside class="import-card">
+      <h2>Última importación</h2>
+      <div class="details">
+        <div class="detail-row"><span>Archivo</span><strong>{% if latest_batch %}{{ latest_batch.file.name|cut:'imports/' }}{% else %}Sin importaciones{% endif %}</strong></div>
+        <div class="detail-row"><span>Periodo</span><strong>{% if latest_batch %}{{ latest_batch.created_at|date:'F Y'|capfirst }}{% else %}—{% endif %}</strong></div>
+        <div class="detail-row"><span>Registros válidos</span><strong class="valid">{% if latest_batch %}{{ latest_batch.rows_imported }}{% else %}0{% endif %}</strong></div>
+      </div>
+      <div class="notice"><span class="notice-icon">ⓘ</span><span>Las facturas publicadas podrán ser consultadas por Pepa según cuenta o cédula.</span></div>
+    </aside>
+  </div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

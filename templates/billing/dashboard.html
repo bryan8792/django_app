@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Resumen | AGUAPAS{% endblock %}
+{% block header_title %}Resumen{% endblock %}
+{% block content %}
+<div class="content-header">
+  <div><div class="eyebrow" style="color:#078ba0">Corte de facturación · Enero 2026</div><h1>Resumen operativo</h1><p>Actualiza datos, facturas y recordatorios desde un solo lugar.</p></div>
+  <div class="actions"><a class="btn light" href="{% url 'import_excel' %}">⇧ &nbsp;Importar Excel</a><a class="btn" href="{% url 'campaign_create' %}">◯ &nbsp;Crear envío</a></div>
+</div>
+<div class="cards">
+  <div class="metric-card cyan"><div class="metric-label">Abonados totales</div><div class="metric-value">{{ subscribers|default:455 }}</div><div class="metric-note">+12 este mes</div></div>
+  <div class="metric-card green"><div class="metric-label">WhatsApp autorizado</div><div class="metric-value">{{ whatsapp_authorized|default:218 }}</div><div class="metric-note">Base con consentimiento</div></div>
+  <div class="metric-card amber"><div class="metric-label">Sin contacto</div><div class="metric-value">{{ without_contact|default:237 }}</div><div class="metric-note">Requieren actualización</div></div>
+  <div class="metric-card red"><div class="metric-label">Deuda total</div><div class="metric-value">$ {{ debt|floatformat:2|default:'91.713,26' }}</div><div class="metric-note">Corte enero 2026</div></div>
+</div>
+<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div><h2>Actividad reciente</h2><span class="eyebrow">Últimas facturas actualizadas</span></div><a class="btn light" href="{% url 'subscribers' %}">Ver abonados</a></div><table class="table"><tr><th>Abonado</th><th>Cuenta</th><th>Periodo</th><th>Total</th><th>Estado</th></tr>{% for invoice in recent %}<tr><td>{{ invoice.subscriber.full_name }}</td><td>{{ invoice.subscriber.account_number }}</td><td>{{ invoice.period|date:'m/Y' }}</td><td>$ {{ invoice.amount }}</td><td>{{ invoice.get_status_display }}</td></tr>{% empty %}<tr><td colspan="5">Todavía no hay facturas. Importa el Excel para comenzar.</td></tr>{% endfor %}</table></div>
+{% endblock %}
